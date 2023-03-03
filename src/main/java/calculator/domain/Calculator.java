@@ -1,7 +1,6 @@
 package calculator.domain;
 
 import calculator.operator.*;
-import calculator.operator.tobe.*;
 
 import java.util.List;
 
