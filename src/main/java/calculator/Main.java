@@ -1,7 +1,5 @@
 package calculator;
 
-import calculator.CustomWebApplicationServer;
-
 import java.io.IOException;
 
 public class Main {
