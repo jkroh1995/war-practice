@@ -9,10 +9,14 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class CustomWebApplicationServer {
 
     private final int port;
+
+    private final ExecutorService executorService = Executors.newFixedThreadPool(10); // 쓰레드 풀 생성
 
     private static final Logger logger = LoggerFactory.getLogger(CustomWebApplicationServer.class);
 
@@ -31,13 +35,9 @@ public class CustomWebApplicationServer {
                 logger.info("[CustomWebApplicationServer] client connected");
 
                 /**
-                 *  STEP 2 - 사용자 요청이 들어올 때마다 Thread를 새로 생성해서 사용자 요청처리
-                 *  STEP 1에서는 Main Thread에서 처리했던 로직을, 새롭게 Thread객체를 만들고 거기에 이양함.
-                 *  그런데 쓰레드는 생성 될 때마다 메모리 공간을 할당 받아야 함.
-                 *  그럼 한 번에 엄청 많은 요청이 몰리면? 당연히 성능이 무지하게 떨어짐.
+                 *  STEP 3- Thread Pool 을 적용해 안적적 서비스 구현
                  */
-
-                new Thread(new ClientRequestHandler(clientSocket)).start();
+                executorService.execute(new ClientRequestHandler(clientSocket));
             }
         }
     }
